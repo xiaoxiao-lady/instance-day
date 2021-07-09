@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    <div class="list">
+    通用名：
+    <input type="text" v-model="inputText" @input="handleInput" />
+    <div class="list" ref="list">
       <div
         class="item"
         v-for="item in list"
@@ -18,7 +20,9 @@
 
 <script>
 // @ is an alias to /src
-
+import axios from "axios";
+let timer = null;
+let inputTimer = null;
 export default {
   name: "Home",
   components: {
@@ -49,6 +53,7 @@ export default {
   },
   data() {
     return {
+      inputText: "",
       isShow: false,
       list: [
         {
@@ -124,7 +129,60 @@ export default {
       currentView: "loading1",
     };
   },
+  mounted() {
+    // this.handleGetInfo();
+
+    this.$refs.list.addEventListener("scroll", (e) => {
+      console.log("---" + e.target.scrollTop);
+      if (timer) {
+        clearTimeout(timer);
+      }
+      timer = setTimeout(() => {
+        console.log(e.target.scrollTop);
+        // timer = undefined;
+      }, 30);
+    });
+  },
+  computed: {
+    handleInput() {
+      return this.throttle(this.handleInputClick, 2000);
+    },
+  },
   methods: {
+    handleInputClick(val) {
+      console.log(111);
+      // 防抖
+      //   if (inputTimer) {
+      //     clearInterval(inputTimer);
+      //   }
+      //   inputTimer = setTimeout(() => {
+      //     console.log("防抖");
+      //   }, 1000);
+      //   节流
+    },
+    throttle(fn, wait) {
+      let last = 0; //这个节流return出去的是函数所以执行的时候执行的就函数不会执行这个
+      return function() {
+        let now = new Date().valueOf();
+        let that = this;
+        let args = arguments;
+        if (now - last > wait) {
+          fn.apply(that, args);
+          last = now;
+        }
+      };
+    },
+
+    handleGetInfo() {
+      axios({
+        method: "get",
+        url: "/api/user/getInfo",
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch(() => {});
+    },
     hiddenPopup() {
       this.isShow = false;
     },
