@@ -11,7 +11,7 @@ export default {
   },
   watch: {},
   mounted() {
-    let horse = require("../assets/horse.png");
+    let horse = require("../..//assets/horse.png");
     var stage = new createjs.Stage("mycanvas");
     createjs.Ticker.addEventListener("tick", stageBreakHandler);
     var img = new Image();
