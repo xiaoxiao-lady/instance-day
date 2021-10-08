@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .overHidden {
+            width: 300px;
+            border: 1px solid red;
+            overflow: hidden;
+            height: 150px;
+            line-height: 30px;
+        }
+        
+        p {
+            margin: 0;
+        }
+    </style>
+
+</head>
+
+<body>
+    <button id="btn"> 哈哈</button>
+    <!-- <button onclick="debounce(sayHi)()"> 哈哈</button> -->
+
+    <script>
+        function debounce(fn) {
+            let timeout = null; // 创建一个标记用来存放定时器的返回值
+            let that = this;
+            return function() {
+                clearTimeout(timeout); // 每当用户输入的时候把前一个 setTimeout clear 掉
+                timeout = setTimeout(() => {
+                    // 然后又创建一个新的 setTimeout, 这样就能保证输入字符后的
+                    // interval 间隔内如果还有字符输入的话，就不会执行 fn 函数
+                    fn.apply(that, arguments);
+                }, 500);
+            };
+        }
+
+        function sayHi() {
+            console.log('防抖成功');
+        }
+
+        var btn = document.getElementById('btn');
+        btn.onclick = debounce(sayHi)
+            // btn.addEventListener('click', debounce(sayHi)); // addEventListener里面的debounce加的括号，是在编译的时候就执行成返回的函数，所以可以onclick是不可以的
+    </script>
+</body>
+
+</html>

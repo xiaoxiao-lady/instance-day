@@ -26,8 +26,8 @@ let inputTimer = null;
 export default {
   name: "Home",
   components: {
-    popup: () => import("./loading/popup.vue"),
-    loading1: () => import("./loading/loading1.vue"),
+    popup: () => import("./popup.vue"),
+    loading1: () => import("./loading1.vue"),
     loading2: () => import("./loading2"),
     loading3: () => import("./loading3"),
     loading4: () => import("./loading4"),

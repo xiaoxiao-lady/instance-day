@@ -40,10 +40,10 @@ export default {
         return true;
       }
 
-      this.$message({
-        message: "Please do not upload files larger than 1m in size.",
-        type: "warning",
-      });
+      //   this.$message({
+      //     message: "Please do not upload files larger than 1m in size.",
+      //     type: "warning",
+      //   });
       return false;
     },
     handleSuccess({ results, header }) {
