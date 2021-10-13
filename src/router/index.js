@@ -40,6 +40,11 @@ const routes = [
             name: "图表",
             component: () => import("../views/com-1/echart/index.vue"),
           },
+          {
+            path: "/tree",
+            name: "树",
+            component: () => import("../views/com-1/tree/index.vue"),
+          },
         ],
       },
       {
@@ -51,6 +56,11 @@ const routes = [
             path: "/debounce",
             name: "防抖节流",
             component: () => import("../views/com-2/FunDemo/debounce.vue"),
+          },
+          {
+            path: "/deep-clone",
+            name: "深拷贝",
+            component: () => import("../views/com-2/FunDemo/deepClone.vue"),
           },
         ],
       },
