@@ -55,6 +55,39 @@
             //         console.log(key)
             //     }, this)
             // console.log(set)
+
+        function a() {
+            try {
+                b();
+            } catch (err) {
+                if (err.code === "NETWORK_ERROR") {
+                    return console.log("I can handle this");
+                }
+                // can't handle, pass it down
+                throw err;
+            }
+        }
+
+        function b() {
+            try {
+                c();
+            } catch (err) {
+                if (err.code === "INPUT_ERROR") {
+                    return console.log("I can handle this");
+                }
+                // can't handle, pass it down
+                throw err;
+            }
+        }
+
+        function c() {
+            throw new Error({
+                code: "INPUT_ERROR",
+                message: "an error  occured",
+            });
+        }
+
+        a();
     </script>
 </body>
 

@@ -1,7 +1,13 @@
 <template>
-  <div class="page">
+  <div
+    class="page"
+    id="page"
+  >
     <div class="left">
-      <el-menu default-active="2" class="el-menu-vertical-demo">
+      <el-menu
+        default-active="2"
+        class="el-menu-vertical-demo"
+      >
         <el-submenu
           :index="index + ''"
           v-for="(item, index) in menuList"
@@ -14,8 +20,7 @@
             v-for="(item1, i) in item.children"
             :key="2 * i"
             @click="handleClickMenu(item1)"
-            >{{ item1.name }}</el-menu-item
-          >
+          >{{ item1.name }}</el-menu-item>
         </el-submenu>
         <!-- <el-menu-item
           :index="index"
@@ -25,7 +30,7 @@
         >
           <i class="el-icon-menu"></i>
           <span slot="title">{{ item.name }}</span>
-        </el-menu-item> -->
+        </el-menu-item>-->
       </el-menu>
     </div>
     <div class="right">
@@ -50,6 +55,14 @@ export default {
   methods: {
     handleClickMenu(item) {
       this.$router.push(item.path);
+    },
+    async b() {
+      await a();
+      console.log(1);
+    },
+    async a() {
+      await new Promise();
+      console.log(2);
     },
   },
 };

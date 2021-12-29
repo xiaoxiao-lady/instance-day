@@ -45,6 +45,16 @@ const routes = [
             name: "树",
             component: () => import("../views/com-1/tree/index.vue"),
           },
+          {
+            path: "/layout",
+            name: "九宫格",
+            component: () => import("../views/com-1/layout/index.vue"),
+          },
+          {
+            path: "/page1",
+            name: "积分动画",
+            component: () => import("../views/com-1/page1/index.vue"),
+          },
         ],
       },
       {
@@ -63,6 +73,23 @@ const routes = [
             component: () => import("../views/com-2/FunDemo/deepClone.vue"),
           },
         ],
+      },
+      {
+        path: "/data-type",
+        name: "数据类型",
+        component: () => import("../views/parent.vue"),
+        // children: [
+        //   {
+        //     path: "/instanceof",
+        //     name: "instanceof",
+        //     component: () => import("../views/data-type/instanceof/index.vue"),
+        //   },
+        //   {
+        //     path: "/deep-clone",
+        //     name: "深拷贝",
+        //     component: () => import("../views/com-2/FunDemo/deepClone.vue"),
+        //   },
+        // ],
       },
     ],
   },

@@ -1,6 +1,11 @@
 <template>
   <div>
-    <el-button @click="getDebounce">点击</el-button>
+    <h1>{{data.id}}</h1>
+    <input
+      type="text"
+      :value="id"
+    >
+    <el-button @click="getDebounce">点击1</el-button>
   </div>
 </template>
 
@@ -10,7 +15,12 @@ export default {
   data() {
     return {
       timer: null,
+      data: {},
+      id,
     };
+  },
+  mounted() {
+    this.id = this.data?.id;
   },
   computed: {
     // getDebounce() {

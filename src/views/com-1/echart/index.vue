@@ -1,6 +1,11 @@
 <template>
-  <div>
-    <div ref="chart" class="data-chart" style="width:600px;height:300px"></div>
+  <div id="we-page">
+    <div
+      ref="chart"
+      class="data-chart"
+      style="width:600px;height:300px"
+    ></div>
+
   </div>
 </template>
 
@@ -18,9 +23,10 @@ export default {
   data() {
     return {
       chart: null,
+      imgUrl: "",
     };
   },
-  mounted() {
+  async mounted() {
     this.chart = echarts.init(this.$refs.chart);
 
     const options = {
@@ -82,6 +88,7 @@ export default {
     };
     this.chart.setOption(options);
   },
+  methods: {},
 };
 </script>
 
