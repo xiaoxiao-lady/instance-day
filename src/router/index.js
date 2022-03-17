@@ -55,6 +55,11 @@ const routes = [
             name: "积分动画",
             component: () => import("../views/com-1/page1/index.vue"),
           },
+          {
+            path: "/page3",
+            name: "v-model实例",
+            component: () => import("../views/com-1/page3/index.vue"),
+          },
         ],
       },
       {
@@ -90,6 +95,23 @@ const routes = [
         //     component: () => import("../views/com-2/FunDemo/deepClone.vue"),
         //   },
         // ],
+      },
+      {
+        path: "/vue",
+        name: "vue2",
+        component: () => import("../views/parent.vue"),
+        children: [
+          {
+            path: "/page3-1",
+            name: "v-model实例",
+            component: () => import("../views/com-3/page1/index.vue"),
+          },
+          {
+            path: "/page3-2",
+            name: "v-bind.sync实例",
+            component: () => import("../views/com-3/page2/index.vue"),
+          },
+        ],
       },
     ],
   },

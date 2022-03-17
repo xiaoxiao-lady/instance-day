@@ -57,6 +57,20 @@ export default {
     });
     this.imgUrl = imgBlobData;
     console.log(imgBlobData);
+    // window.onbeforeunload = function (e) {
+    //   e.returnValue = "wode";
+    //   return "hahah";
+    // };
+    window.addEventListener(
+      "message",
+      (event) => {
+        console.log(event.data);
+        if (event.data === "close") {
+          window.close();
+        }
+      },
+      false
+    );
   },
 
   methods: {
