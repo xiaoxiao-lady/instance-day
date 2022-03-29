@@ -1,6 +1,9 @@
 <template>
-  <child v-model="sex"></child>
-  <!-- <child v-model="form"></child> -->
+  <div>
+    <child v-model="sex"></child>
+    <!-- <child v-model="form"></child> -->
+    <div>{{ msg }}</div>
+  </div>
 </template>
 
 <script>
@@ -13,6 +16,7 @@ export default {
         sex: "",
       },
       sex: "",
+      msg: "哈哈",
     };
   },
   components: {

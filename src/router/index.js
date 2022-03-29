@@ -111,6 +111,11 @@ const routes = [
             name: "v-bind.sync实例",
             component: () => import("../views/com-3/page2/index.vue"),
           },
+          {
+            path: "/page3-3",
+            name: "watch探索",
+            component: () => import("../views/com-3/page3/index.vue"),
+          },
         ],
       },
     ],
