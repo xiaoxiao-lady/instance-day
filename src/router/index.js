@@ -116,6 +116,11 @@ const routes = [
             name: "watch探索",
             component: () => import("../views/com-3/page3/index.vue"),
           },
+          {
+            path: "/page3-4",
+            name: "v-for上面的key",
+            component: () => import("../views/com-3/page4/index.vue"),
+          },
         ],
       },
     ],
