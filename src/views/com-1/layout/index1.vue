@@ -3,16 +3,10 @@
     <div v-if="!errorText">
       <div id="drug-guide"></div>
       <div class="button-wraper">
-        <div
-          v-if="!addDrugGuide"
-          class="button"
-          @click="goDrugReming('add')"
-        >添加用药提醒</div>
-        <div
-          v-else
-          class="button"
-          @click="goDrugReming"
-        >查看用药提醒</div>
+        <div v-if="!addDrugGuide" class="button" @click="goDrugReming('add')">
+          添加用药提醒
+        </div>
+        <div v-else class="button" @click="goDrugReming">查看用药提醒</div>
       </div>
       <img
         src="https://kano.guahao.cn/mG5466017116"
@@ -20,14 +14,8 @@
         @click="goAsk"
       />
     </div>
-    <div
-      v-else
-      class="error"
-    >
-      <img
-        alt="error-img"
-        src="https://kano.guahao.cn/4xQ122719109"
-      />
+    <div v-else class="error">
+      <img alt="error-img" src="https://kano.guahao.cn/4xQ122719109" />
       <p class="error-text">{{ errorText }}</p>
     </div>
   </div>
@@ -111,34 +99,6 @@ export default {
         });
       }
     },
-  },
-  async asyncData({ route, context, errorHandler }) {
-    const { patientId, prescriptionId } = route.query;
-    const data = {
-      addDrugGuide: false,
-    };
-
-    try {
-      const tagData = await apiPrescriptionTag(context, {
-        prescriptionId,
-        patientId,
-      });
-      data.tag = tagData.tag;
-
-      const params = {
-        bizId: prescriptionId,
-        isEncrypt: 1,
-        patientId,
-        tag: tagData.tag,
-      };
-      const res = await apiIsvisible(context, params);
-      data.addDrugGuide = res.data;
-    } catch (error) {
-      errorHandler(error);
-      data.errorText = error.message;
-    }
-
-    return data;
   },
 };
 </script>
