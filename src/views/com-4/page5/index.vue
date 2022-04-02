@@ -1,8 +1,7 @@
 <template> </template>
 
 <script>
-// import "./normal";
-// import "./design";
+import "./design";
 import "./design1";
 
 export default {

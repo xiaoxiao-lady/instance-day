@@ -148,6 +148,16 @@ const routes = [
             name: "工厂模式",
             component: () => import("../views/com-4/page4/index.vue"),
           },
+          {
+            path: "/page4-5",
+            name: "适配器模式",
+            component: () => import("../views/com-4/page5/index.vue"),
+          },
+          {
+            path: "/page4-5",
+            name: "装饰器模式",
+            component: () => import("../views/com-4/page5/index.vue"),
+          },
         ],
       },
     ],
