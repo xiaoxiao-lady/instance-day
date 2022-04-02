@@ -1,6 +1,7 @@
 <template> </template>
 
 <script>
+import "./index";
 export default {
   data() {
     return {};

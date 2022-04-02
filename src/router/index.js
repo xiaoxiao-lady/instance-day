@@ -133,21 +133,21 @@ const routes = [
             name: "策略模式",
             component: () => import("../views/com-4/page1/index.vue"),
           },
-          // {
-          //   path: "/page4-2",
-          //   name: "v-bind.sync实例",
-          //   component: () => import("../views/com-4/page2/index.vue"),
-          // },
-          // {
-          //   path: "/page4-3",
-          //   name: "watch探索",
-          //   component: () => import("../views/com-4/page3/index.vue"),
-          // },
-          // {
-          //   path: "/page4-4",
-          //   name: "v-for上面的key",
-          //   component: () => import("../views/com-4/page4/index.vue"),
-          // },
+          {
+            path: "/page4-2",
+            name: "发布订阅模式",
+            component: () => import("../views/com-4/page2/index.vue"),
+          },
+          {
+            path: "/page4-3",
+            name: "单例模式",
+            component: () => import("../views/com-4/page3/index.vue"),
+          },
+          {
+            path: "/page4-4",
+            name: "工厂模式",
+            component: () => import("../views/com-4/page4/index.vue"),
+          },
         ],
       },
     ],

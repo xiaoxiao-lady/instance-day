@@ -1,6 +1,8 @@
 <template> </template>
 
 <script>
+import "./normal";
+import "./design";
 export default {
   data() {
     return {};
