@@ -17,7 +17,6 @@ const res = {
   hangzhou: 11,
   jinhua: 12,
 };
-
 const adaptor = (oldObj = []) => {
   const obj = oldObj.reduce((pre, item) => {
     pre[item.name] = item.id;

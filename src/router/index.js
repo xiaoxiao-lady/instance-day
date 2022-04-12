@@ -19,6 +19,10 @@ const routes = [
             path: "/a",
             name: "导入1",
             component: () => import("../views/com-1/Import/index.vue"),
+            // beforeEnter: (to, from, next) => {
+            //   alert(to.path);
+            //   next();
+            // },
           },
           {
             path: "/contents",
@@ -64,7 +68,7 @@ const routes = [
       },
       {
         path: "/fun",
-        name: "函数",
+        name: "手写",
         component: () => import("../views/parent.vue"),
         children: [
           {
@@ -76,6 +80,11 @@ const routes = [
             path: "/deep-clone",
             name: "深拷贝",
             component: () => import("../views/com-2/FunDemo/deepClone.vue"),
+          },
+          {
+            path: "/page2-3",
+            name: "Promise",
+            component: () => import("../views/com-2/page3/index.vue"),
           },
         ],
       },
@@ -167,5 +176,12 @@ const routes = [
 const router = new VueRouter({
   routes,
 });
-
+// 全局导航守卫
+router.beforeEach((to, from, next) => {
+  next();
+});
+// router.afterEach((to, from, next) => {
+//   alert(from.path);
+//   next();
+// });
 export default router;

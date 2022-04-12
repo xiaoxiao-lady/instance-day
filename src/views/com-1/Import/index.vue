@@ -1,5 +1,8 @@
 <template>
   <div>
+    <el-button @click="update">更新</el-button>
+    <h1>{{ form.name }}</h1>
+    <h1>{{ sex }}</h1>
     <!-- 导入EXCEL的组件 -->
     <el-button
       class="upload"
@@ -32,14 +35,43 @@ export default {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
     },
   },
+  // beforeRouteEnter(to, from, next) {
+  //   alert("组件内导航enter" + to.path);
+  //   next();
+  // },
+  // beforRouteUpdate(to, from, next) {
+  //   alert("组件内导航update" + to.path);
+  //   next();
+  // },
+  // beforeRouteLeave(to, from, next) {
+  //   alert("组件内导航leave" + to.path);
+  //   next();
+  // },
+  created() {
+    this.sex = "男";
+    this.form.name = "haha";
+  },
   data() {
     return {
       fileName: "",
       importing: false,
+      form: {},
     };
   },
-  watch: {},
+  watch: {
+    form: {
+      deep: true,
+      handler(val) {
+        console.log(val);
+      },
+    },
+  },
   methods: {
+    update() {
+      this.sex = "女";
+      this.form.name = "哈哈哈哈哈";
+      console.log(this.form);
+    },
     handlerUpload() {
       //   this.$refs.fileInput.value = "";
       this.$refs.fileInput.click();
