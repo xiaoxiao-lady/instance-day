@@ -90,18 +90,48 @@ class myPromise {
         });
       }
     });
+    return promise2;
   }
 }
-
+// 让不同的promise代码互相套用
 function resolvePromise(promise2, x, resolve, reject) {
   try {
     // 自己等待自己完成是错误的实现，用一个类型错误，结束掉 promise  Promise/A+ 2.3.1
+    // 解决下面案例的这种错误
+    // let p = new Promise((resolve) => {
+    //   resolve(0);
+    // });
+    // var p2 = p.then((data) => {
+    //   return p2;
+    // });
     if (promise2 === x) {
       return reject(
         new TypeError("Chaining cycle detected for promise #<Promise>")
       );
     }
     if (isFunction(x) || isObject(x)) {
+      let then = x.then;
+      // 如果then是函数，就默认是promise了
+      // if (isFunction(then)) {
+      //   then.call(
+      //     x,
+      //     (y) => {
+      //       // 成功和失败只能调用一个
+      //       if (called) return;
+      //       called = true;
+      //       // resolve的结果依旧是promise 那就继续解析
+      //       resolvePromise(promise2, y, resolve, reject);
+      //     },
+      //     (err) => {
+      //       // 成功和失败只能调用一个
+      //       if (called) return;
+      //       called = true;
+      //       reject(err); // 失败了就失败了
+      //     }
+      //   );
+      // } else {
+      //   resolve(x);
+      // }
     } else {
       // 如果 x.then 是个普通值就直接返回 resolve 作为结果  Promise/A+ 2.3.3.4
       resolve(x);
@@ -135,13 +165,39 @@ function resolvePromise(promise2, x, resolve, reject) {
 /**
  * 异步
  */
+// const test5 = new myPromise((resolve, reject) => {
+//   setTimeout(() => {
+//     resolve("成功");
+//   }, 3000);
+// }).then((res) => {
+//   console.log(res);
+// });
+/**
+ * 链式调用
+ */
 const test5 = new myPromise((resolve, reject) => {
-  setTimeout(() => {
-    resolve("成功");
-  }, 3000);
-}).then((res) => {
-  console.log(res);
-});
+  resolve("成功");
+})
+  .then((res) => {
+    return "第一个then" + res;
+  })
+  .then((res) => {
+    console.log(res);
+  });
+/**
+ * 返回的x是对象的形式
+ */
+// const p2 = new myPromise((resolve, reject) => {
+//   resolve(100);
+// });
+
+// p2.then((res) => {
+//   console.log("fulfilled", res);
+//   return new myPromise((resolve, reject) => resolve(3 * res));
+// }).then((res) => {
+//   console.log("fulfilled", res);
+// });
+
 console.log(test5);
 // console.log(test2);
 // console.log(test3);
