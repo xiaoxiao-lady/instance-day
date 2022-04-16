@@ -2,7 +2,13 @@
 
 <script>
 import "./index";
-export default {};
+import "./test";
+export default {
+  data() {
+    return {};
+  },
+  methods: {},
+};
 </script>
 
 <style></style>
