@@ -104,6 +104,18 @@ class myPromise {
     });
     return promise2;
   }
+  finally(cb) {
+    return this.then(
+      (value) => {
+        myPromise.resolve(cb()).then(() => value); //
+      },
+      (err) => {
+        myPromise.resolve(cb()).then(() => {
+          throw err;
+        });
+      }
+    );
+  }
   static all(promises) {
     try {
       let result = [];
@@ -165,6 +177,29 @@ class myPromise {
     } catch (error) {
       console.log(error);
     }
+  }
+  static any(promises) {
+    let result = [];
+    let i = 0;
+    return new myPromise((resolve, reject) => {
+      function processData(index, data) {
+        result[index] = data;
+        i++;
+        if (i === promises.length) {
+          reject(new AggregateError(result)); //全部成功之后才会改变为fulfilled状态
+        }
+      }
+      promises.forEach((p, index) => {
+        p.then(
+          (res) => {
+            resolve(res);
+          },
+          (err) => {
+            processData(index, err);
+          }
+        );
+      });
+    });
   }
   static resolve(val) {
     // 是Promise实例，直接返回即可
@@ -348,21 +383,57 @@ module.exports = myPromise;
 /**
  * 测试race方法
  */
+// const p1 = new myPromise((resolve, reject) => {
+//   setTimeout(() => {
+//     resolve(100);
+//   }, 2000);
+// });
+// const p2 = new myPromise((resolve, reject) => {
+//   setTimeout(() => {
+//     reject("超时");
+//   }, 1000);
+// });
+// const test12= myPromise
+//   .race([p1, p2])
+//   .then(console.log)
+//   .catch((err) => console.log("err", err));
+/**
+ * 测试finally方法
+ * 这个目前还是有点问题的，看视频确认一下
+ */
+
+// const test13 = new myPromise((resolve, reject) => {
+//   resolve(100);
+// })
+//   .then(() => {
+//     return 200;
+//   })
+//   .catch((err) => console.log("err", err))
+//   .finally(() => {
+//     alert("始终会执行的回调");
+//   });
+// .then((res) => {
+//   console.log("我是finally后面的then", res);
+// });
+/**
+ * 测试any方法,有一个成功就成功，所有的失败才失败
+ */
 const p1 = new myPromise((resolve, reject) => {
   setTimeout(() => {
     resolve(100);
-  }, 2000);
+  }, 200);
 });
 const p2 = new myPromise((resolve, reject) => {
   setTimeout(() => {
     reject("超时");
-  }, 1000);
+  }, 100);
 });
-const test9 = myPromise
-  .race([p1, p2])
+const p3 = myPromise.resolve(2);
+
+const test14 = myPromise
+  .any([p1, p2, p3])
   .then(console.log)
   .catch((err) => console.log("err", err));
-
 // 测试是否符合promiseA+规范,含有800多个测试用例，不是很好测试，放弃
 myPromise.deferred = function() {
   const dfd = {};
