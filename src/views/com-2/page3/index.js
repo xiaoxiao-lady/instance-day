@@ -107,10 +107,10 @@ class myPromise {
   finally(cb) {
     return this.then(
       (value) => {
-        myPromise.resolve(cb()).then(() => value); //
+        return myPromise.resolve(cb()).then(() => value); //
       },
       (err) => {
-        myPromise.resolve(cb()).then(() => {
+        return myPromise.resolve(cb()).then(() => {
           throw err;
         });
       }
