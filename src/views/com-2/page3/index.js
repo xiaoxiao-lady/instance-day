@@ -418,22 +418,23 @@ module.exports = myPromise;
 /**
  * 测试any方法,有一个成功就成功，所有的失败才失败
  */
-const p1 = new myPromise((resolve, reject) => {
-  setTimeout(() => {
-    resolve(100);
-  }, 200);
-});
-const p2 = new myPromise((resolve, reject) => {
-  setTimeout(() => {
-    reject("超时");
-  }, 100);
-});
-const p3 = myPromise.resolve(2);
+// const p1 = new myPromise((resolve, reject) => {
+//   setTimeout(() => {
+//     resolve(100);
+//   }, 200);
+// });
+// const p2 = new myPromise((resolve, reject) => {
+//   setTimeout(() => {
+//     reject("超时");
+//   }, 100);
+// });
+// const p3 = myPromise.resolve(2);
 
-const test14 = myPromise
-  .any([p1, p2, p3])
-  .then(console.log)
-  .catch((err) => console.log("err", err));
+// const test14 = myPromise
+//   .any([p1, p2, p3])
+//   .then(console.log)
+//   .then(console.log)
+//   .catch((err) => console.log("err", err));
 // 测试是否符合promiseA+规范,含有800多个测试用例，不是很好测试，放弃
 myPromise.deferred = function() {
   const dfd = {};
