@@ -1,7 +1,7 @@
 <template> </template>
 
 <script>
-import "./index";
+// import "./index";
 import "./test";
 export default {
   data() {

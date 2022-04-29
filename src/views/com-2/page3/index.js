@@ -349,25 +349,25 @@ module.exports = myPromise;
 /**
  * 测试all方法
  */
-// const p1 = new myPromise((resolve, reject) => {
-//   resolve(100);
-// });
-// const p2 = new myPromise((resolve, reject) => {
-//   resolve(100);
-// });
-// const p3 = new myPromise((resolve, reject) => {
-//   reject("错误");
-// });
-// const test9 = myPromise
-//   .all([p1, p2, p3])
-//   .then(console.log)
-//   .catch((err) => console.log("err", err));
-// const test10 = myPromise
-//   .allSettled([p1, p2, p3])
-//   .then(console.log)
-//   .catch((err) => console.log("err", err));
+const p1 = new myPromise((resolve, reject) => {
+  resolve(100);
+});
+const p2 = new myPromise((resolve, reject) => {
+  resolve(100);
+});
+const p3 = new myPromise((resolve, reject) => {
+  reject("错误");
+});
+const test9 = myPromise
+  .all([p1, p2, p3])
+  .then(console.log)
+  .catch((err) => console.log("err", err));
+const test10 = myPromise
+  .allSettled([p1, p2, p3])
+  .then(console.log)
+  .catch((err) => console.log("err", err));
 
-// console.log(test9);
+console.log(test9);
 
 /**
  * 测试resolve方法
