@@ -2,7 +2,8 @@
 
 <script>
 // import "./index";
-import "./test";
+// import "./test";
+import "./async-test.js";
 export default {
   data() {
     return {};
