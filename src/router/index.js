@@ -64,6 +64,11 @@ const routes = [
             name: "v-model实例",
             component: () => import("../views/com-1/page3/index.vue"),
           },
+          {
+            path: "/page4",
+            name: "css动画属性",
+            component: () => import("../views/com-1/page4/index.vue"),
+          },
         ],
       },
       {
