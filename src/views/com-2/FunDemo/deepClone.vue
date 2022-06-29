@@ -28,7 +28,6 @@ export default {
     obj1.a = obj1; //循环引用的对象调用deepClone会报错
     // const res = this.deepClone(obj1);
     const res = this.cloneDeep3(fun);
-    console.log("----", res);
 
     // const hash = new Map();
     // hash.set(obj, obj); //后面的obj变化了，hash的结构也跟着改变了
@@ -81,7 +80,7 @@ export default {
     cloneDeep3(source, hash = new WeakMap()) {
       debugger;
       if (!this.isObject(source)) return source;
-      return this.cloneFunction(source);
+      return this.cloneFunction1(source);
       if (hash.has(source)) return hash.get(source); // 新增代码，查哈希表
 
       var target = Array.isArray(source) ? [] : {};
@@ -98,12 +97,14 @@ export default {
       }
       return target;
     },
+    // 函数拷贝的核心就是通过正则匹配出参数和函数体，然后通过new Function()构建函数的方式成功新的拷贝函数
     cloneFunction(func) {
       debugger;
-      const bodyReg = /(?<={)(.|\n)+(?=})/m;
-      const paramReg = /(?<=\().+(?=\)\s+{)/;
-      const funcString = func.toString(); //
+      const bodyReg = /(?<={)(.|\n)+(?=})/m; //正则匹配函数的函数体
+      const paramReg = /(?<=\().+(?=\)\s+{)/; //正则匹配函数的参数
+      const funcString = func.toString(); //函数转化为字符串
       if (func.prototype) {
+        // func.prototype普通函数才有prototype，箭头函数没有prototype
         console.log("普通函数");
         const param = paramReg.exec(funcString);
         const body = bodyReg.exec(funcString);
@@ -112,7 +113,7 @@ export default {
           if (param) {
             const paramArr = param[0].split(",");
             console.log("匹配到参数：", paramArr);
-            return new Function(...paramArr, body[0]);
+            return new Function(...paramArr, body[0]); //函数拷贝的关键是new Function传入对应的参数
           } else {
             return new Function(body[0]);
           }
@@ -121,7 +122,7 @@ export default {
         }
       } else {
         // 箭头函数
-        return eval(funcString);
+        return eval(funcString); //eval把字符串作为脚本执行
       }
     },
   },
