@@ -84,7 +84,8 @@ const routes = [
           {
             path: "/deep-clone",
             name: "深拷贝",
-            component: () => import("../views/com-2/FunDemo/deepClone.vue"),
+            component: () =>
+              import("../views/com-2/FunDemo/deepclone/deepClone.vue"),
           },
           {
             path: "/page2-3",
