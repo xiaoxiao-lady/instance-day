@@ -27,6 +27,7 @@ export const isObject = (target) => {
     (typeof target == "object" || typeof target == "function")
   );
 };
+// 构造方法初始化cloneTarget
 function getInit(target) {
   // 利用其构造函数初始化cloneTarget ，eg:cloneTarget  =  new Array() 相当于初始化了一个[]
   const Ctor = target.constructor; // 获取目标值的构造方法[1].constructor == Array;
@@ -36,9 +37,10 @@ function getInit(target) {
 function getType(target) {
   return Object.prototype.toString.call(target);
 }
+// 拷贝函数
 function cloneFunction(target) {
   const bodyReg = /(?<={)(.|\n)+(?=})/;
-  const paramReg = /(?<=().+(?=)\s+{)/;
+  const paramReg = /(?<=\().+(?=\)\s+{)/;
   const funString = target.toString();
   if (target.prototype) {
     const body = bodyReg.exec(funString)[0];
@@ -57,6 +59,7 @@ function cloneFunction(target) {
     return eval(funString);
   }
 }
+// 拷贝不可循环递归的对象
 function cloneOtherDeep(target, type) {
   const Ctor = target.constructor;
   switch (type) {
@@ -65,7 +68,7 @@ function cloneOtherDeep(target, type) {
     case boolTag:
     case errorTag:
     case dateTag:
-      return new Ctor();
+      return new Ctor(target);
     case regexpTag:
     //  处理正则
     case funTag:
@@ -75,6 +78,7 @@ function cloneOtherDeep(target, type) {
       return null;
   }
 }
+// 工具函数-循环
 function myForEach(array, cb) {
   let index = -1;
   const len = array.length;
@@ -84,12 +88,12 @@ function myForEach(array, cb) {
   return array;
 }
 export function cloneDeep(target, weakMap = new WeakMap()) {
-  const Ctor = target.constructor; //
-  if (!isObject) {
+  debugger;
+  if (!isObject(target)) {
     return target;
   }
   let cloneTarget;
-  const type = getType();
+  const type = getType(target);
   if (deepTag.includes(type)) {
     // 循环遍历的函数
     cloneTarget = getInit(target);
@@ -134,6 +138,7 @@ export function cloneDeep(target, weakMap = new WeakMap()) {
   myForEach(keys || target, (value, key) => {
     if (keys) {
       key = value; //keys遍历的话value才是我们要的key
+      value = target[key];
     }
     cloneTarget[key] = cloneDeep(value, weakMap);
   });
