@@ -88,7 +88,6 @@ function myForEach(array, cb) {
   return array;
 }
 export function cloneDeep(target, weakMap = new WeakMap()) {
-  debugger;
   if (!isObject(target)) {
     return target;
   }
@@ -144,3 +143,19 @@ export function cloneDeep(target, weakMap = new WeakMap()) {
   });
   return cloneTarget;
 }
+
+// demo
+
+let obj1 = {
+  name: "浪里行舟",
+  arr: [1, [2, 3], 4],
+};
+let obj2 = cloneDeep(obj1);
+obj2.name = "阿浪";
+obj2.arr[1] = [5, 6, 7];
+console.log("obj1", obj1); // obj1 { name: '浪里行舟', arr: [ 1, [ 2, 3 ], 4 ] }
+console.log("obj2", obj2); // obj2 { name: '阿浪', arr: [ 1, [ 5, 6, 7 ], 4 ] }
+
+// >结论：完全拷贝了一份新的内存空间，都不公用，互补影响
+
+// 深拷贝实现方式
