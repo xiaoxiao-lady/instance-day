@@ -3,8 +3,8 @@
 </template>
 
 <script>
-// import "./deepclone.js"; //深拷贝
-import "./shallowclone.js"; //浅拷贝
+import "./deepclone.js"; //深拷贝
+// import "./shallowclone.js"; //浅拷贝
 // import "./assignment.js"; //赋值
 export default {
   mounted() {},

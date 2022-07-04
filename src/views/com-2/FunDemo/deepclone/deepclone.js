@@ -159,3 +159,38 @@ console.log("obj2", obj2); // obj2 { name: '阿浪', arr: [ 1, [ 5, 6, 7 ], 4 ] 
 // >结论：完全拷贝了一份新的内存空间，都不公用，互补影响
 
 // 深拷贝实现方式
+// 方式一：JSON.stringify+JSON.parse
+let arr = [
+  1,
+  3,
+  {
+    username: {
+      name: "lianha",
+    },
+  },
+];
+let arr4 = JSON.parse(JSON.stringify(arr));
+arr4[2].username.name = "duncan";
+arr4[0] = 0;
+
+console.log(arr); //[1, 3, { username: {name:'lianha'} }]
+console.log(arr4); //[0, 3, { username: {name:'duncan'} }]
+
+// 方式二：函数库lodash的_.cloneDeep方法
+import { cloneDeep as _cloneDeep } from "lodash";
+let arr20 = [
+  1,
+  3,
+  {
+    username: {
+      name: "lianha",
+    },
+  },
+];
+let arr21 = _cloneDeep(arr20);
+arr21[2].username.name = "duncan";
+console.log(arr); //[1, 3, { username: {name:'lianha'} }]
+console.log(arr21); //[1, 3, { username: {name:'duncan'} }]
+
+// 方式三：jQuery.extend()
+// 方式四：手写深度递归拷贝
