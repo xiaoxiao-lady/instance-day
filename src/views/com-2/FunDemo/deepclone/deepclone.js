@@ -59,6 +59,28 @@ function cloneFunction(target) {
     return eval(funString);
   }
 }
+// 拷贝正则-也是通过new构造函数
+function cloneReg(target) {
+  // eg:exp: /\d{2,5}/例子输出的就是下面的正则对象
+  //target = {
+  //   lastIndex: 0;
+  //   dotAll: false;
+  //   flags: "";
+  //   global: false;
+  //   hasIndices: false;
+  //   ignoreCase: false;
+  //   multiline: false;
+  //   source: "\\d{2,5}";
+  //   sticky: false;
+  //   unicode: false;
+  // }
+  const reg = /\w*$/; //\w是匹配字母数字下划线，*表示匹配0个或者多个
+  const Ctor = target.constructor;
+  console.log(reg.exec(target)); //得到
+  let result = new Ctor(target.source, reg.exec(target)); //new RegExp(\\d{2,5})
+  result.lastIndex = target.lastIndex;
+  return result;
+}
 // 拷贝不可循环递归的对象
 function cloneOtherDeep(target, type) {
   const Ctor = target.constructor;
@@ -70,6 +92,7 @@ function cloneOtherDeep(target, type) {
     case dateTag:
       return new Ctor(target);
     case regexpTag:
+      return cloneReg(target);
     //  处理正则
     case funTag:
       return cloneFunction(target);
@@ -132,6 +155,10 @@ export function cloneDeep(target, weakMap = new WeakMap()) {
    * 【数组和对象】
    */
   // 对象的话需要遍历的是keys，数组直接遍历
+  console.log("keys", Object.getPrototypeOf(target));
+  for (const key in target) {
+    console.log("key", key, target[key]);
+  }
   const keys = type == arrayTag ? undefined : Object.keys(target);
   //从性能优化的角度考虑，测试证明while的性能比for in和for的性能要好，foreach的原理是while
   myForEach(keys || target, (value, key) => {
@@ -149,6 +176,7 @@ export function cloneDeep(target, weakMap = new WeakMap()) {
 let obj1 = {
   name: "浪里行舟",
   arr: [1, [2, 3], 4],
+  exp: /\d{2,5}/,
 };
 let obj2 = cloneDeep(obj1);
 obj2.name = "阿浪";
@@ -157,7 +185,6 @@ console.log("obj1", obj1); // obj1 { name: '浪里行舟', arr: [ 1, [ 2, 3 ], 4
 console.log("obj2", obj2); // obj2 { name: '阿浪', arr: [ 1, [ 5, 6, 7 ], 4 ] }
 
 // >结论：完全拷贝了一份新的内存空间，都不公用，互补影响
-
 // 深拷贝实现方式
 // 方式一：JSON.stringify+JSON.parse
 let arr = [
