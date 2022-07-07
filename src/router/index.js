@@ -92,6 +92,11 @@ const routes = [
             name: "Promise",
             component: () => import("../views/com-2/page3/index.vue"),
           },
+          {
+            path: "/page2-4",
+            name: "数组方法",
+            component: () => import("../views/com-2/page4/index.vue"),
+          },
         ],
       },
       {
