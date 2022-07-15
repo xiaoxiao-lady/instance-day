@@ -69,6 +69,11 @@ const routes = [
             name: "css动画属性",
             component: () => import("../views/com-1/page4/index.vue"),
           },
+          {
+            path: "/page5",
+            name: "内存泄漏测试",
+            component: () => import("../views/com-1/page5/index.vue"),
+          },
         ],
       },
       {
