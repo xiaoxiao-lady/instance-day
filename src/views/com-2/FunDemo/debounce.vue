@@ -1,22 +1,20 @@
 <template>
   <div>
-    <h1>{{data.id}}</h1>
-    <input
-      type="text"
-      :value="id"
-    >
-    <el-button @click="getDebounce">点击1</el-button>
+    <h1>{{ data.id }}</h1>
+    <input type="text" :value="id" />
+    <el-button @click="getDebounce">防抖</el-button>
+    <el-button @click="getThrottle">节流</el-button>
   </div>
 </template>
 
 <script>
-import { debounce } from "./debounce.js";
+import { debounce, throttle, throttle1, throttle2 } from "./debounce.js";
 export default {
   data() {
     return {
       timer: null,
       data: {},
-      id,
+      id: "",
     };
   },
   mounted() {
@@ -26,9 +24,12 @@ export default {
     // getDebounce() {
     //   return debounce(this.handleGetInfo, 500);
     // },
+    getThrottle() {
+      return throttle2(this.handleGetInfo, 2000);
+    },
   },
   methods: {
-    getDebounce: debounce(function () {
+    getDebounce: debounce(function() {
       this.handleGetInfo();
     }, 500),
     // getDebounce() {
