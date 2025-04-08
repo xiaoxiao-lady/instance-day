@@ -1,13 +1,7 @@
 <template>
   <div id="we-page">
-    <el-button
-      type="primary"
-      @click="handleBack"
-    >返回上一个页面</el-button>
-    <el-input
-      placeholder="输入关键字进行过滤"
-      v-model="filterText"
-    ></el-input>
+    <el-button type="primary" @click="handleBack">返回上一个页面</el-button>
+    <el-input placeholder="输入关键字进行过滤" v-model="filterText"></el-input>
     <el-tree
       size="small"
       class="filter-tree"
@@ -22,10 +16,12 @@
       ref="tree"
     ></el-tree>
     <el-button @click="getCheckedNodes">确定</el-button>
-    <img
-      :src="imgUrl"
-      alt=""
-    >
+    <img :src="imgUrl" alt="" />
+
+    <div class="anmation">
+      下拉选择
+      <div class="icon">></div>
+    </div>
   </div>
 </template>
 
@@ -80,7 +76,7 @@ export default {
       function fun1() {
         console.log("1");
       }
-      const fun2 = function () {
+      const fun2 = function() {
         console.log("b");
       };
     },
@@ -170,4 +166,15 @@ export default {
 </script>
 
 <style>
+.anmation {
+  display: flex;
+}
+.anmation .icon {
+  transition: transform 0.5s;
+  transform-origin: center;
+  cursor: pointer;
+}
+.anmation .icon:hover {
+  transform: rotate(180deg);
+}
 </style>

@@ -3,6 +3,7 @@ import "./assets/css/reset.css";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import "./directives/index"; //自定义指令
 import ElementUi from "element-ui";
 
 import { Message } from "element-ui";

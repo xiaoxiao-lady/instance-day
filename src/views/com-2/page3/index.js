@@ -310,7 +310,7 @@ module.exports = myPromise;
 //     console.log(res);
 //   });
 /**
- * 返回的x是对象的形式
+ * 返回的x是promise的形式
  */
 // const test6 = new myPromise((resolve, reject) => {
 //   resolve(100);

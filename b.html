@@ -1,94 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
-        .overHidden {
-            width: 300px;
-            border: 1px solid red;
-            overflow: hidden;
-            height: 150px;
-            line-height: 30px;
-        }
-        
-        p {
-            margin: 0;
-        }
+      .overHidden {
+        width: 300px;
+        border: 1px solid red;
+        overflow: hidden;
+        height: 150px;
+        line-height: 30px;
+      }
+
+      p {
+        margin: 0;
+      }
     </style>
+  </head>
 
-</head>
+  <body></body>
+  <script>
+    function debounce(fn, wait) {
+      let timer = null; //通过闭包保存timer状态
 
-<body>
-    <button id="btn">哈哈</button>
-    <!-- <button onclick="debounce(sayHi)()"> 哈哈</button> -->
-
-    <script>
-        // btn.addEventListener('click', debounce(sayHi)); // addEventListener里面的debounce加的括号，是在编译的时候就执行成返回的函数，所以可以onclick是不可以的
-        // const obj = {
-        //     a: "a"
-        // }
-        // const map = new Map();
-        // map.set(obj, {
-        //     B: "aa"
-        // })
-        // map.set('aaa', 100)
-        // const res = map.get('aaa')
-        // const res1 = map.get(obj)
-        // console.log(map.has(obj))
-        // console.log(map.size)
-        // console.log(map.keys())
-        // console.log([...map])
-        // for (let item of map.entries()) {
-        //     console.log(item)
-
-        // }
-
-        let set = new Set([1, 2, 3, 3, 3, 3]);
-        let arr = [...set]
-        console.log(arr)
-            // set.forEach(function(value, key, ownerSet) {
-            //         console.log(value)
-            //         console.log(key)
-            //     }, this)
-            // console.log(set)
-
-        function a() {
-            try {
-                b();
-            } catch (err) {
-                if (err.code === "NETWORK_ERROR") {
-                    return console.log("I can handle this");
-                }
-                // can't handle, pass it down
-                throw err;
-            }
+      return function() {
+        let that = this; //保存this指向，因为settimeout内部的this指向不一定和函数的相同
+        let args = arguments; //保存arguments指向，因为arguments内部的this指向不一定和函数的相同
+        if (timer) {
+          clearTimeout(timer);
         }
+        timer = setTimeout(() => {
+          fn.apply(that, arguments);
+        }, wait);
+      };
+    }
 
-        function b() {
-            try {
-                c();
-            } catch (err) {
-                if (err.code === "INPUT_ERROR") {
-                    return console.log("I can handle this");
-                }
-                // can't handle, pass it down
-                throw err;
-            }
+    function throttle(fn, wait) {
+      let old = 0;
+      return function() {
+        let now = new Date().valueOf();
+        if (now - old > wait) {
+          fn.apply(this, arguments);
+          old = now;
         }
-
-        function c() {
-            throw new Error({
-                code: "INPUT_ERROR",
-                message: "an error  occured",
-            });
+      };
+    }
+    function throttle1(fn, wait) {
+      let timer;
+      return function() {
+        if (!timer) {
+          timer = setTimeout(() => {
+            clearTimeout(timer);
+            timer = null;
+            fn.apply(this, arguments);
+          }, wait);
         }
-
-        a();
-    </script>
-</body>
-
+      };
+    }
+  </script>
 </html>

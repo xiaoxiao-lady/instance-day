@@ -1,3 +1,4 @@
+import Vue from "vue";
 export const debounce = function(fn, wait) {
   let timer;
   return function() {

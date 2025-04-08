@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <script>
+      //  【 二分搜索】
+      function search(arr, target) {
+        const recursion = (start, end) => {
+          //   console.log("进入");
+          const middle = Math.floor((start + end) / 2);
+          const val = arr[middle];
+          if (target === val) {
+            return middle;
+          } else if (target > val) {
+            return recursion(middle + 1, end);
+          } else {
+            return recursion(start, middle);
+          }
+        };
+        return recursion(0, arr.length - 1);
+      }
+      const arr = [1, 2, 3, 4, 5, 6, 7];
+      const res1 = search(arr, 3);
+      const res2 = 1;
+      //   search(arr, 10);
+      //   console.log(res1, res2);
+      //   【lecode  169. 多数元素】
+      var majorityElement = function(nums) {
+        const calCount = (start, end, num) => {
+          let count = 0;
+          for (let i = start; i <= end; i++) {
+            if (nums[i] === num) {
+              count++;
+            }
+          }
+          return count;
+        };
+        const majority = (start, end, type) => {
+          debugger;
+          console.log(start, end, type);
+          if (start === end) return nums[start];
+          const middle = Math.floor((start + end) / 2);
+          const left = majority(start, middle, "left"); //注意这里递归进入，后面的先不回执行，除非递归到最后一层得到结果，在又外向里执行后面的代码
+          const right = majority(middle + 1, end, "right");
+          if (left === right) {
+            return left;
+          }
+          const l_count = calCount(start, middle, left);
+          const r_count = calCount(middle + 1, end, right);
+          return l_count > r_count ? left : right;
+        };
+        return majority(0, nums.length - 1, "common");
+      };
+      //   console.log(majorityElement([2, 3, 1, 3, 2, 1, 2, 4, 5, 6]));
+
+      // 【 88.合并两个有序数组】
+      var merge = function(nums1, m, nums2, n) {
+        if (m === 0) {
+          return nums2;
+        }
+        const sliNum = nums1.slice(0, m);
+        console.log(sliNum);
+        return [...sliNum, ...nums2].sort((a, b) => a - b);
+      };
+      const res = merge([1, 2, 3, 0, 0, 0], 3, [2, 5, 6], 3);
+      // console.log(res)
+      // 【27 移除元素】
+      var removeElement = function(nums, val) {
+        return nums.filter((num) => num !== val).length;
+      };
+      const removeElementRes = removeElement([3, 2, 2, 3], 3);
+      // console.log(removeElementRes,'移除元素')
+      //  【189. 轮转数组】
+      // var rotate = function(nums, k) {
+      //   let len = (i = nums.length);
+      //   if ((k %= len) === 0) return;
+      //   // while (i--) { //这里表示的是i--为真，先执行判断再自减，如果 i 的值为真（非零），则执行循环体内的代码块，执行完代码才会将 i 的值减 1。
+      //   //     nums[i + k] = nums[i]
+      //   //     if (i < k) nums[i] = nums[len + i]
+      //   // }
+      //   // 等价于
+      //   while (i > 0) {
+      //     i--;
+      //     nums[i + k] = nums[i]; // 6 - 4 第一个其实是undefined,后面移动的才是对的
+      //     console.log([i + k], i, nums);
+      function ListNode(val, next) {
+        this.val = val === undefined ? 0 : val;
+        this.next = next === undefined ? null : next;
+      }
+      var trainningPlan = function(l1, l2) {
+        let tem = new ListNode(-1); //头节点
+        let pre = tem; //移动指针
+        while (l1 != null && l2 != null) {
+          if (l1.val <= l2.val) {
+            pre.next = l1; // pre.next指向了
+            l1 = l1.next; //l1指向l1的下一位
+            // pre = pre.next
+          } else {
+            pre.next = l2;
+            l2 = l2.next;
+            // pre = pre.next
+          }
+          //  不管什么情况，pre需要向后移动一位
+          pre = pre.next;
+        }
+        // l1还没有遍历完，直接添加到pre上
+        if (l1 != null) {
+          pre.next = l1;
+        }
+        // l2还没有遍历完，直接添加到pre上
+
+        if (l2 != null) {
+          pre.next = l2;
+        }
+        console.log('tem',tem)
+        console.log('pre',pre)
+        return tem.next;
+      };
+      trainningPlan([1,2,4], [1,3,4])
+    </script>
+  </body>
+</html>
