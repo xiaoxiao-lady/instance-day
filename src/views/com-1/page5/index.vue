@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button ref="btn">点击设置点击设置</el-button>
+    <el-button ref="btn">点击</el-button>
   </div></template
 >
 

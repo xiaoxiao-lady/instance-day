@@ -2,6 +2,8 @@
  *通过Object.prototype.toString.call(val) 判断的结果值枚举
  */
 
+import deepClone from "./deepClone.vue";
+
 // 可以循环遍历的数据类型;
 const mapTag = "[object Map]";
 const setTag = "[object Set]";
@@ -34,6 +36,11 @@ function getInit(target) {
   return new Ctor();
 }
 // 其他的不可遍历的数据类型是指，他通过typeof判断是对象，但是他通过Object.prototype是一些基本的类型
+// 其他的不可遍历的数据类型是指，包装对象，他通过typeof判断是对象，但是他通过Object.prototype是一些基本的类型
+// 因为 typeof 无法区分基本类型和包装对象。
+// 比如：‌（如 new Number(42), new String("hello")）是对象类型。虽然它们包裹了基本数据，但属于引用类型，需要深拷贝。
+// const num = 42; // 基本类型，直接复制即可
+// const numObj = new Number(42); // 对象类型，需要深拷贝
 function getType(target) {
   return Object.prototype.toString.call(target);
 }
@@ -61,6 +68,7 @@ function cloneFunction(target) {
 }
 // 拷贝正则-也是通过new构造函数
 function cloneReg(target) {
+  debugger
   // eg:exp: /\d{2,5}/例子输出的就是下面的正则对象
   //target = {
   //   lastIndex: 0;
@@ -74,11 +82,9 @@ function cloneReg(target) {
   //   sticky: false;
   //   unicode: false;
   // }
-  const reg = /\w*$/; //\w是匹配字母数字下划线，*表示匹配0个或者多个
   const Ctor = target.constructor;
-  console.log(reg.exec(target)); //得到
-  let result = new Ctor(target.source, reg.exec(target)); //new RegExp(\\d{2,5})
-  result.lastIndex = target.lastIndex;
+  let result = new Ctor(target.source, target.flags); //// 复制模式和标志
+  result.lastIndex = target.lastIndex; //复制状态（如 lastIndex）
   return result;
 }
 // 拷贝不可循环递归的对象
@@ -184,40 +190,46 @@ obj2.arr[1] = [5, 6, 7];
 console.log("obj1", obj1); // obj1 { name: '浪里行舟', arr: [ 1, [ 2, 3 ], 4 ] }
 console.log("obj2", obj2); // obj2 { name: '阿浪', arr: [ 1, [ 5, 6, 7 ], 4 ] }
 
-// >结论：完全拷贝了一份新的内存空间，都不公用，互补影响
-// 深拷贝实现方式
-// 方式一：JSON.stringify+JSON.parse
-let arr = [
-  1,
-  3,
-  {
-    username: {
-      name: "lianha",
-    },
-  },
-];
-let arr4 = JSON.parse(JSON.stringify(arr));
-arr4[2].username.name = "duncan";
-arr4[0] = 0;
+// // >结论：完全拷贝了一份新的内存空间，都不公用，互补影响
+// // 深拷贝实现方式
+// // 方式一：JSON.stringify+JSON.parse
+// let arr = [
+//   1,
+//   3,
+//   {
+//     username: {
+//       name: "lianha",
+//     },
+//   },
+// ];
+// let arr4 = JSON.parse(JSON.stringify(arr));
+// arr4[2].username.name = "duncan";
+// arr4[0] = 0;
 
-console.log(arr); //[1, 3, { username: {name:'lianha'} }]
-console.log(arr4); //[0, 3, { username: {name:'duncan'} }]
+// console.log(arr); //[1, 3, { username: {name:'lianha'} }]
+// console.log(arr4); //[0, 3, { username: {name:'duncan'} }]
 
-// 方式二：函数库lodash的_.cloneDeep方法
-import { cloneDeep as _cloneDeep } from "lodash";
-let arr20 = [
-  1,
-  3,
-  {
-    username: {
-      name: "lianha",
-    },
-  },
-];
-let arr21 = _cloneDeep(arr20);
-arr21[2].username.name = "duncan";
-console.log(arr); //[1, 3, { username: {name:'lianha'} }]
-console.log(arr21); //[1, 3, { username: {name:'duncan'} }]
+// // 方式二：函数库lodash的_.cloneDeep方法
+// import { cloneDeep as _cloneDeep } from "lodash";
+// let arr20 = [
+//   1,
+//   3,
+//   {
+//     username: {
+//       name: "lianha",
+//     },
+//   },
+// ];
+// let arr21 = _cloneDeep(arr20);
+// arr21[2].username.name = "duncan";
+// console.log(arr); //[1, 3, { username: {name:'lianha'} }]
+// console.log(arr21); //[1, 3, { username: {name:'duncan'} }]
 
-// 方式三：jQuery.extend()
-// 方式四：手写深度递归拷贝
+// // 方式三：jQuery.extend()
+// // 方式四：手写深度递归拷贝
+
+const regex1 = /abc/gi;
+const regexCopy = deepClone(regex1)
+console.log(regexCopy)
+regexCopy.lastIndex  = 5
+console.log(regex1)
