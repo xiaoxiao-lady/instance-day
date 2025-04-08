@@ -174,9 +174,6 @@ session 的认证流程
 
 1.用户第一次请求服务器的时候，服务端会生成 session 并把 sessionID 返回给客户端 2.客户端接收到 sessionID 会存储在 cookie 中， 3.等第二次请求的时候会携带上，服务端就是通过 sessionId 查找对应的 session 信息
 
-<<<<<<< HEAD
-Cookie 和 Session 的区别
-=======
 css兼容性前缀
 
 -webkit-     chrome
@@ -204,21 +201,11 @@ ios上下拉会出现空白 ，解决：阻止默认行为
 ios软键盘弹起之后，fixed失效变成absolute
 
 ios
->>>>>>> 81c50beecc021dfa43294be95544c4bf996e95af
 
 安全性
 
 cookie 存储在客户端，session 存储在服务端
 
-<<<<<<< HEAD
-有效期
-cookie 存储的时间可以自己设置，session 存储的时间比较短，客户端关闭一般都会失效
-存储大小
-
-cookie 存储容量比较小，不超过 4kb，session 存储的容量比较大
-
-cookie 只能存储字符串，或者要转换为字符串才能存储
-=======
 
 ie11以上的兼容
 使用垫片polyfill，
@@ -543,4 +530,3 @@ HTTPS并不是一个新的协议, 而是一个加强版的HTTP。其原理是在
 
 1.虚拟DOM本质上是js对象，是对真实dom的抽象
 2.状态变更的时候，通过patch新旧节点，最小化更新到真实的dom上面
->>>>>>> 81c50beecc021dfa43294be95544c4bf996e95af
