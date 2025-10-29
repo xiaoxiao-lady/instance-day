@@ -13,9 +13,13 @@ pipeline {
         
         stage('Install Dependencies') {
             steps {
-                echo '📦 安装依赖...'
-                sh 'npm install'
-            }
+                 echo '📦 安装依赖...'
+                 sh '''
+                 # 安装cnpm并使用
+                 npm install -g cnpm --registry=https://registry.npmmirror.com
+                 cnpm install
+                   '''
+                   }
         }
         
         stage('Build') {
