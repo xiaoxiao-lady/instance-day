@@ -1,6 +1,8 @@
 pipeline {
     agent any
-    
+    tools {
+        nodejs 'node16'  // 与上面配置的名称一致
+    }
     stages {
         stage('Checkout') {
             steps {
