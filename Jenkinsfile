@@ -1,16 +1,17 @@
 pipeline {
     agent any
     tools {
-        nodejs 'node16'  // 与上面配置的名称一致
+        nodejs 'node16'
     }
-    // 固定环境配置
+    
     environment {
         APP_NAME = "my-vue-app"
-        DEPLOY_DIR = "/Users/wjy/nginx-deploy/my-vue-app" 
         DEPLOY_URL = "http://localhost:8000"
-        NODE_ENV = "development"
-        COMPANY = "自动化部署项目"
+        CONTAINER_NAME = "nginx-vue-app"
+        // M1芯片使用ARM兼容的镜像
+        NGINX_IMAGE = "nginx:alpine"
     }
+    
     stages {
         stage('Checkout') {
             steps {
@@ -21,44 +22,70 @@ pipeline {
         
         stage('Install Dependencies') {
             steps {
-                 echo '📦 安装依赖...'
-                 sh '''
-                 # 安装cnpm并使用
-                 npm install -g cnpm --registry=https://registry.npmmirror.com
-                 cnpm install
-                   '''
-                   }
+                echo '📦 安装依赖...'
+                sh '''
+                  npm install -g cnpm --registry=https://registry.npmmirror.com
+                  cnpm install
+                '''
+            }
         }
         
         stage('Build') {
             steps {
                 echo '🏗️ 构建Vue项目...'
                 sh 'npm run build'
+                sh 'ls -la dist/'
             }
         }
-        stage('部署到Nginx') {
+        
+        stage('Docker Deploy for M1') {
             steps {
+                echo '🍎 M1芯片Docker部署...'
                 sh """
-                  echo "🚀 开始部署 ${env.APP_NAME}"
-                  echo "📁 目标目录: ${env.DEPLOY_DIR}"
-                  echo "🌐 访问地址: ${env.DEPLOY_URL}"
+                  # 停止旧容器
+                  docker stop ${env.CONTAINER_NAME} 2>/dev/null || echo "清理旧容器"
+                  docker rm ${env.CONTAINER_NAME} 2>/dev/null || echo "容器已清理"
                   
-                  # 部署操作
-                  sudo mkdir -p ${env.DEPLOY_DIR}
-                  sudo rm -rf ${env.DEPLOY_DIR}/*
-                  sudo cp -r dist/* ${env.DEPLOY_DIR}/
-                  sudo chmod -R 755 ${env.DEPLOY_DIR}
+                  # 为M1芯片拉取合适的镜像
+                  echo "拉取Nginx镜像..."
+                  docker pull ${env.NGINX_IMAGE}
                   
-                  # 重启Nginx
-                  sudo nginx -s reload
+                  # 启动容器（M1兼容）
+                  docker run -d \\
+                    --name ${env.CONTAINER_NAME} \\
+                    -p 8000:80 \\
+                    -v \$(pwd)/dist:/usr/share/nginx/html \\
+                    ${env.NGINX_IMAGE}
                   
-                  echo "✅ 部署完成!"
+                  echo "✅ M1 Docker部署完成"
                 """
             }
         }
+        
+        stage('Health Check') {
+            steps {
+                echo '🔍 检查部署状态...'
+                sh """
+                  sleep 3
+                  
+                  # 检查容器架构
+                  echo "=== 容器信息 ==="
+                  docker exec ${env.CONTAINER_NAME} uname -m
+                  
+                  # 健康检查
+                  if curl -f ${env.DEPLOY_URL} > /dev/null 2>&1; then
+                    echo "✅ M1部署成功!"
+                  else
+                    echo "❌ 部署失败，检查日志..."
+                    docker logs ${env.CONTAINER_NAME}
+                    exit 1
+                  fi
+                """
+            }
+        }
+        
         stage('Archive') {
             steps {
-                echo '📁 存档构建文件...'
                 archiveArtifacts artifacts: 'dist/**/*', fingerprint: true
             }
         }
@@ -66,8 +93,9 @@ pipeline {
     
     post {
         success {
-            echo "🎉 ${env.APP_NAME} 部署成功!"
+            echo "🎉 ${env.APP_NAME} 在M1 Mac上部署成功!"
             echo "🔗 访问: ${env.DEPLOY_URL}"
+            echo "🍎 架构: Apple M1"
         }
     }
 }
