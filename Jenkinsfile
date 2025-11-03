@@ -5,14 +5,29 @@ pipeline {
     }
     
     environment {
+        // 重置PATH为系统默认值
+        PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Docker.app/Contents/Resources/bin"
+        
         APP_NAME = "my-vue-app"
         DEPLOY_URL = "http://localhost:8000"
         CONTAINER_NAME = "nginx-vue-app"
-        // M1芯片使用ARM兼容的镜像
         NGINX_IMAGE = "nginx:alpine"
     }
     
     stages {
+        stage('Environment Check') {
+            steps {
+                echo '🔧 检查环境...'
+                sh """
+                  echo "=== 环境信息 ==="
+                  echo "PATH: \$PATH"
+                  echo "Node.js: \$(which node)"
+                  echo "npm: \$(which npm)" 
+                  echo "Docker: \$(which docker || echo 'Docker未找到')"
+                """
+            }
+        }
+        
         stage('Checkout') {
             steps {
                 echo '🔗 拉取代码...'
@@ -38,64 +53,45 @@ pipeline {
             }
         }
         
-        stage('Docker Deploy for M1') {
+        stage('Docker Deploy') {
             steps {
-                echo '🍎 M1芯片Docker部署...'
+                echo '🐳 Docker部署...'
                 sh """
                   # 停止旧容器
-                  docker stop ${env.CONTAINER_NAME} 2>/dev/null || echo "清理旧容器"
+                  docker stop ${env.CONTAINER_NAME} 2>/dev/null || echo "无旧容器"
                   docker rm ${env.CONTAINER_NAME} 2>/dev/null || echo "容器已清理"
                   
-                  # 为M1芯片拉取合适的镜像
-                  echo "拉取Nginx镜像..."
-                  docker pull ${env.NGINX_IMAGE}
-                  
-                  # 启动容器（M1兼容）
+                  # 启动新容器
                   docker run -d \\
                     --name ${env.CONTAINER_NAME} \\
                     -p 8000:80 \\
                     -v \$(pwd)/dist:/usr/share/nginx/html \\
                     ${env.NGINX_IMAGE}
                   
-                  echo "✅ M1 Docker部署完成"
+                  echo "✅ Docker部署完成"
                 """
             }
         }
         
         stage('Health Check') {
             steps {
-                echo '🔍 检查部署状态...'
                 sh """
-                  sleep 3
-                  
-                  # 检查容器架构
-                  echo "=== 容器信息 ==="
-                  docker exec ${env.CONTAINER_NAME} uname -m
-                  
-                  # 健康检查
+                  sleep 5
                   if curl -f ${env.DEPLOY_URL} > /dev/null 2>&1; then
-                    echo "✅ M1部署成功!"
+                    echo "🎉 部署成功: ${env.DEPLOY_URL}"
                   else
-                    echo "❌ 部署失败，检查日志..."
+                    echo "❌ 部署失败"
                     docker logs ${env.CONTAINER_NAME}
                     exit 1
                   fi
                 """
             }
         }
-        
-        stage('Archive') {
-            steps {
-                archiveArtifacts artifacts: 'dist/**/*', fingerprint: true
-            }
-        }
     }
     
     post {
         success {
-            echo "🎉 ${env.APP_NAME} 在M1 Mac上部署成功!"
-            echo "🔗 访问: ${env.DEPLOY_URL}"
-            echo "🍎 架构: Apple M1"
+            echo "✅ 自动化部署成功!"
         }
     }
 }
